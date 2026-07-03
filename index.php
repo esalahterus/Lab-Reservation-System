@@ -13,7 +13,7 @@ $slots = $db->query("SELECT id,sesi,label FROM slot_waktu ORDER BY sesi")->fetch
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Sistem Reservasi Laboratorium Komputer – Universitas Cihuy">
+<meta name="description" content="Sistem Reservasi Laboratorium Komputer – Universitas Tertutup">
 <title>SiResLab – Sistem Reservasi Laboratorium Komputer</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -24,13 +24,13 @@ $slots = $db->query("SELECT id,sesi,label FROM slot_waktu ORDER BY sesi")->fetch
 body{background:#f0f4f8;color:#1a1a2e;}
 a{text-decoration:none;}
 
-/* NAVBAR */
+/* navbar */
 .navbar-main{background:var(--navy);padding:.85rem 0;position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,.3);}
 .brand-logo{width:38px;height:38px;background:linear-gradient(135deg,var(--accent),#0099cc);border-radius:10px;display:flex;align-items:center;justify-content:center;}
 .nav-link-custom{color:rgba(255,255,255,.7)!important;font-weight:500;font-size:.85rem;padding:.4rem .85rem!important;border-radius:8px;transition:all .2s;}
 .nav-link-custom:hover,.nav-link-custom.active{color:#fff!important;background:rgba(255,255,255,.1);}
 
-/* HERO */
+/* hero */
 .hero{background:linear-gradient(135deg,var(--navy) 0%,#0f3460 60%,#1a1a4e 100%);padding:5rem 0 4rem;position:relative;overflow:hidden;}
 .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 70% 50%,rgba(0,212,255,.07) 0%,transparent 60%);}
 .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.25);color:var(--accent);border-radius:50px;padding:.3rem .9rem;font-size:.78rem;font-weight:700;margin-bottom:1.25rem;}
@@ -47,36 +47,36 @@ a{text-decoration:none;}
 .hstat-num{font-size:1.6rem;font-weight:800;color:var(--accent);}
 .hstat-lbl{font-size:.75rem;color:rgba(255,255,255,.5);}
 
-/* SECTIONS */
+/* sections */
 .section-eyebrow{font-size:.72rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent);}
 .section-title{font-size:1.75rem;font-weight:800;color:var(--navy);letter-spacing:-.3px;}
 
-/* LAB CARDS */
+/* lab cards */
 .lab-card{background:#fff;border-radius:18px;border:1px solid var(--border);padding:1.4rem;transition:all .3s;cursor:pointer;height:100%;}
 .lab-card:hover{transform:translateY(-5px);box-shadow:0 12px 40px rgba(0,0,0,.1);border-color:var(--accent);}
 .lab-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:.9rem;}
 
-/* JADWAL GRID */
+/* jadwal grid */
 .cell-free{background:rgba(16,185,129,.08);color:#059669;text-align:center;border-radius:8px;padding:.4rem;font-size:.75rem;}
 .cell-booked{color:#fff;border-radius:8px;padding:.45rem .6rem;font-size:.75rem;line-height:1.4;}
 
-/* CEK STATUS */
+/* cek status */
 .cek-card{background:#fff;border-radius:20px;border:1px solid var(--border);padding:2rem;}
 .res-row{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--border);}
 .res-row:last-child{border-bottom:none;}
 .res-lbl{font-size:.8rem;color:#6c757d;}
 .res-val{font-size:.85rem;font-weight:600;color:var(--navy);text-align:right;max-width:55%;}
 
-/* FOOTER */
+/* footer */
 .footer{background:var(--navy);color:rgba(255,255,255,.5);padding:2.5rem 0 1.5rem;margin-top:4rem;}
 
-/* MISC */
+/* misc */
 @media(max-width:768px){.hero{padding:3rem 0 2.5rem;}.hero-stats{gap:1.25rem;}}
 </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
+<!-- navbar -->
 <nav class="navbar navbar-main navbar-expand-lg">
   <div class="container">
     <a class="navbar-brand d-flex align-items-center gap-2" href="index.php">
@@ -106,14 +106,14 @@ a{text-decoration:none;}
   </div>
 </nav>
 
-<!-- HERO -->
+<!-- hero -->
 <section class="hero" id="beranda">
   <div class="container position-relative">
     <div class="row align-items-center g-5">
       <div class="col-lg-6">
-        <div class="hero-badge"><span class="spinner-grow spinner-grow-sm text-info" role="status"></span>Sistem Aktif · Universitas Cihuy</div>
+        <div class="hero-badge">UNIVERSITAS TERTUTUP</div>
         <h1>Reservasi <span>Lab Komputer</span> Lebih Mudah & Cepat</h1>
-        <p class="hero-desc mt-3">Platform digital untuk pemesanan ruang laboratorium komputer Gedung Laboratorium. Cek ketersediaan real-time, booking instan, kelola jadwal perkuliahan.</p>
+        <p class="hero-desc mt-3">Platform digital untuk pemesanan ruang laboratorium komputer Universitas Tertutup. Cek ketersediaan real-time, booking instan, kelola jadwal perkuliahan.</p>
         <div class="d-flex gap-3 flex-wrap mt-4">
           <a href="dosen/login.php" class="btn btn-hero-violet"><i class="bi bi-person-badge me-2"></i>Portal Dosen</a>
           <a href="#jadwal" class="btn btn-hero-outline"><i class="bi bi-table me-2"></i>Lihat Jadwal</a>
@@ -128,7 +128,6 @@ a{text-decoration:none;}
       <div class="col-lg-6 d-none d-lg-block">
         <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:1.5rem;backdrop-filter:blur(10px);">
           <div class="d-flex align-items-center gap-2 mb-3">
-            <span style="width:10px;height:10px;border-radius:50%;background:#10b981;display:inline-block;"></span>
             <span style="color:rgba(255,255,255,.6);font-size:.8rem;font-weight:600;">Jadwal Hari Ini</span>
             <span class="ms-auto" style="color:rgba(255,255,255,.35);font-size:.75rem;" id="heroDate"></span>
           </div>
@@ -139,13 +138,13 @@ a{text-decoration:none;}
   </div>
 </section>
 
-<!-- RUANGAN -->
+<!-- ruangan -->
 <section class="py-5" id="ruangan">
   <div class="container">
     <div class="text-center mb-4">
       <div class="section-eyebrow">Fasilitas</div>
       <h2 class="section-title">Ruang Laboratorium</h2>
-      <p class="text-muted mt-2" style="font-size:.9rem;">Gedung Laboratorium – Universitas Cihuy</p>
+      <p class="text-muted mt-2" style="font-size:.9rem;">Universitas Tertutup</p>
     </div>
     <div class="row g-3">
       <?php
@@ -171,7 +170,7 @@ a{text-decoration:none;}
   </div>
 </section>
 
-<!-- JADWAL -->
+<!-- jadwal -->
 <section class="py-5 bg-white" id="jadwal" style="border-top:1px solid var(--border);">
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
@@ -195,7 +194,7 @@ a{text-decoration:none;}
   </div>
 </section>
 
-<!-- CEK STATUS -->
+<!-- cek status -->
 <section class="py-5" id="cek">
   <div class="container">
     <div class="row justify-content-center">
@@ -223,35 +222,7 @@ a{text-decoration:none;}
   </div>
 </section>
 
-<!-- INFO PORTAL -->
-<section class="py-5 bg-white" style="border-top:1px solid var(--border);">
-  <div class="container">
-    <div class="row g-4 justify-content-center">
-      <div class="col-md-5">
-        <div class="p-4 rounded-4 text-center" style="background:linear-gradient(135deg,#0d1b2a,#2d1b69);">
-          <div style="width:64px;height:64px;background:linear-gradient(135deg,#6366f1,#4f46e5);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#fff;margin:0 auto 1rem;"><i class="bi bi-person-badge-fill"></i></div>
-          <h5 style="color:#fff;font-weight:800;">Portal Dosen</h5>
-          <p style="color:rgba(255,255,255,.55);font-size:.85rem;margin-bottom:1.25rem;">Login untuk mengajukan reservasi, memantau jadwal, dan melihat riwayat penggunaan lab.</p>
-          <a href="dosen/login.php" class="btn w-100 fw-700" style="background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;border-radius:12px;padding:.7rem;">
-            <i class="bi bi-box-arrow-in-right me-2"></i>Masuk sebagai Dosen
-          </a>
-        </div>
-      </div>
-      <div class="col-md-5">
-        <div class="p-4 rounded-4 text-center" style="background:linear-gradient(135deg,#0d1b2a,#0f3460);">
-          <div style="width:64px;height:64px;background:linear-gradient(135deg,var(--accent),#0099cc);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#fff;margin:0 auto 1rem;"><i class="bi bi-shield-lock-fill"></i></div>
-          <h5 style="color:#fff;font-weight:800;">Panel Admin</h5>
-          <p style="color:rgba(255,255,255,.55);font-size:.85rem;margin-bottom:1.25rem;">Kelola reservasi, dosen, ruangan, jadwal, dan lihat laporan penggunaan laboratorium.</p>
-          <a href="admin/login.php" class="btn w-100 fw-700" style="background:linear-gradient(135deg,var(--accent),#0099cc);color:#fff;border-radius:12px;padding:.7rem;">
-            <i class="bi bi-box-arrow-in-right me-2"></i>Masuk sebagai Admin
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
+<!-- footer -->
 <footer class="footer">
   <div class="container">
     <div class="row g-4 mb-4">
@@ -260,7 +231,7 @@ a{text-decoration:none;}
           <div style="width:36px;height:36px;background:linear-gradient(135deg,var(--accent),#0099cc);border-radius:9px;display:flex;align-items:center;justify-content:center;"><i class="bi bi-pc-display text-white"></i></div>
           <span style="color:#fff;font-weight:800;">SiResLab</span>
         </div>
-        <p style="font-size:.82rem;line-height:1.7;max-width:280px;">Sistem Reservasi Laboratorium Komputer untuk Universitas Cihuy.</p>
+        <p style="font-size:.82rem;line-height:1.7;max-width:280px;">Sistem Reservasi Laboratorium Komputer Universitas Tertutup.</p>
       </div>
       <div class="col-md-3">
         <div style="color:#fff;font-weight:700;margin-bottom:.8rem;font-size:.88rem;">Laboratorium</div>
@@ -284,7 +255,7 @@ a{text-decoration:none;}
     </div>
     <hr style="border-color:rgba(255,255,255,.1);">
     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
-      <span style="font-size:.78rem;">&copy; <?=date('Y')?> SiResLab · Universitas Cihuy</span>
+      <span style="font-size:.78rem;">&copy; <?=date('Y')?> SiResLab · Universitas Tertutup</span>
       
     </div>
   </div>
@@ -293,7 +264,7 @@ a{text-decoration:none;}
 <div class="position-fixed top-0 end-0 p-3" style="z-index:9999" id="toastWrap"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-const API_R = 'api/reservasi.php';
+const API = 'api/reservasi.php';
 const HARI  = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
 const BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 
@@ -315,7 +286,7 @@ async function loadJadwal() {
     wrap.innerHTML = '<div class="text-center py-5 text-muted"><i class="bi bi-calendar-x display-4 d-block mb-2"></i>Tidak ada jadwal pada hari Sabtu/Minggu</div>';
     return;
   }
-  const res = await fetch(`${API_R}?action=jadwal&tanggal=${tgl}`).then(r=>r.json());
+  const res = await fetch(`${API}?action=jadwal&tanggal=${tgl}`).then(r=>r.json());
   const {data=[], ruangan=[], slots=[]} = res;
   const lk = {};
   data.forEach(b=>{ lk[`${b.ruangan_id}_${b.sesi}`]=b; });
@@ -348,7 +319,7 @@ async function loadJadwal() {
 
 async function loadHeroSchedule() {
   const today = new Date().toISOString().split('T')[0];
-  const res = await fetch(`${API_R}?action=jadwal&tanggal=${today}`).then(r=>r.json());
+  const res = await fetch(`${API}?action=jadwal&tanggal=${today}`).then(r=>r.json());
   const el = document.getElementById('heroSchedule');
   if (!res.data || res.data.length===0) {
     el.innerHTML = '<div style="color:rgba(255,255,255,.4);font-size:.8rem;text-align:center;padding:1rem;">Belum ada reservasi hari ini</div>';
@@ -371,7 +342,7 @@ async function cekStatus() {
   const btn = document.getElementById('btnCek');
   btn.disabled=true; btn.innerHTML='<span class="spinner-border spinner-border-sm"></span>';
 
-  const res = await fetch(`${API_R}?action=detail&kode=${encodeURIComponent(kode)}`).then(r=>r.json());
+  const res = await fetch(`${API}?action=detail&kode=${encodeURIComponent(kode)}`).then(r=>r.json());
   btn.disabled=false; btn.textContent='Cek Status';
 
   const el = document.getElementById('cekResult');

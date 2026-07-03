@@ -74,7 +74,7 @@ async function load(){
   const res=await fetch(`${API}?action=laporan&dari=${dari}&ke=${ke}`).then(r=>r.json());
   const data=res.data||[];
   const pr=res.per_ruangan||[];
-  const pd=res.per_dosen||[];
+  const td=res.top_dosen||[];
 
   const setuju=data.filter(d=>d.status==='disetujui').length;
   const pending=data.filter(d=>d.status==='pending').length;
@@ -97,8 +97,8 @@ async function load(){
       <div style="background:#f0f4f8;border-radius:6px;height:10px;"><div style="height:10px;border-radius:6px;background:linear-gradient(135deg,#00d4ff,#0099cc);width:${(x.n/maxR*100).toFixed(1)}%;"></div></div>
     </div>`).join('')||'<div class="text-muted text-center py-3">Tidak ada data</div>';
 
-  const maxD=pd.reduce((m,x)=>Math.max(m,+x.n),0)||1;
-  document.getElementById('chartDosen').innerHTML=pd.map(x=>`
+  const maxD=td.reduce((m,x)=>Math.max(m,+x.n),0)||1;
+  document.getElementById('chartDosen').innerHTML=td.map(x=>`
     <div class="mb-2">
       <div class="d-flex justify-content-between mb-1" style="font-size:.82rem;"><span class="fw-medium" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${x.nama}</span><span>${x.n}</span></div>
       <div style="background:#f0f4f8;border-radius:6px;height:10px;"><div style="height:10px;border-radius:6px;background:linear-gradient(135deg,#6366f1,#4f46e5);width:${(x.n/maxD*100).toFixed(1)}%;"></div></div>

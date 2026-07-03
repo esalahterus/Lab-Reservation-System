@@ -60,7 +60,6 @@ function slotStatus(PDO $db): void {
     jsonRes(true,'ok',['data'=>$rows]);
 }
 
-
 function jadwal(PDO $db): void {
     $tgl = $_GET['tanggal'] ?? date('Y-m-d');
     $stmt = $db->prepare(baseQuery()." WHERE r.tanggal=? AND r.is_active=1 ORDER BY sw.sesi");
@@ -143,12 +142,13 @@ function laporan(PDO $db): void {
     $data = $stmt->fetchAll();
     $per_ruangan = $db->prepare("SELECT ru.nama,COUNT(*) n FROM reservasi r JOIN ruangan ru ON r.ruangan_id=ru.id WHERE r.tanggal BETWEEN ? AND ? AND r.status='disetujui' GROUP BY ru.id ORDER BY n DESC");
     $per_ruangan->execute([$dari,$ke]);
-    $per_dosen = $db->prepare("SELECT d.nama,COUNT(*) n FROM reservasi r JOIN dosen d ON r.dosen_id=d.id WHERE r.tanggal BETWEEN ? AND ? AND r.status='disetujui' GROUP BY d.id ORDER BY n DESC LIMIT 10");
-    $per_dosen->execute([$dari,$ke]);
-    jsonRes(true,'ok',['data'=>$data,'per_ruangan'=>$per_ruangan->fetchAll(),'per_dosen'=>$per_dosen->fetchAll()]);
+    $top_dosen = $db->prepare("SELECT d.nama,COUNT(*) n FROM reservasi r JOIN dosen d ON r.dosen_id=d.id WHERE r.tanggal BETWEEN ? AND ? AND r.status='disetujui' GROUP BY d.id ORDER BY n DESC LIMIT 10");
+    $top_dosen->execute([$dari,$ke]);
+    jsonRes(true,'ok',['data'=>$data,'per_ruangan'=>$per_ruangan->fetchAll(),'top_dosen'=>$top_dosen->fetchAll()]);
 }
 
 function buat(PDO $db): void {
+    if($_SERVER['REQUEST_METHOD'] !== 'POST') jsonRes(false,'Request method tidak diizinkan');
     $in = json_decode(file_get_contents('php://input'),true) ?? $_POST;
     $did =(int)($in['dosen_id']??0);
     $rid =(int)($in['ruangan_id']??0);
@@ -182,8 +182,8 @@ function buat(PDO $db): void {
     }
 }
 
-
 function updateStatus(PDO $db): void {
+    if($_SERVER['REQUEST_METHOD'] !== 'POST') jsonRes(false,'Request method tidak diizinkan');
     if(!isAdmin()) jsonRes(false,'Akses ditolak');
     $in = json_decode(file_get_contents('php://input'),true) ?? $_POST;
     $id = (int)($in['id']??0);
@@ -196,6 +196,7 @@ function updateStatus(PDO $db): void {
 }
 
 function batalkan(PDO $db): void {
+    if($_SERVER['REQUEST_METHOD'] !== 'POST') jsonRes(false,'Request method tidak diizinkan');
     $in = json_decode(file_get_contents('php://input'),true) ?? $_POST;
     $id = (int)($in['id']??0);
     $did = (int)($in['dosen_id']??$_SESSION['dosen_id']??0);

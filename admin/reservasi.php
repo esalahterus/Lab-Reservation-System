@@ -142,11 +142,11 @@ async function showDetail(id){
     </div>`:''}
     ${d.status==='disetujui' && d.bisa_batalkan === true ?`
     <div class="d-flex gap-2 mt-3">
-      <button class="btn btn-secondary flex-fill"
+      <button class="btn btn-outline-danger flex-fill"
               onclick="ubahStatus(${d.id},'dibatalkan');bootstrap.Modal.getInstance(document.getElementById('mDetail')).hide()">
-        <i class="bi bi-slash-circle me-1"></i>Batalkan
+        <i class="bi bi-x-circle me-2"></i>Batalkan
       </button>
     </div>`:''}`;
-    }
+}
 load();
 </script>

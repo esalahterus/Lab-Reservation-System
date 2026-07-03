@@ -39,7 +39,7 @@ $pending_list = $db->query("SELECT r.id,r.kode_reservasi,r.tanggal,
 <?php
 $stats=[
   ['Total Reservasi',$stat['total'],'bi-calendar3','#e8f4fd','#0099cc'],
-  ['Menunggu Persetujuan',$stat['pending'],'bi-clock-fill','#fff8e1','#f59e0b'],
+  ['Menunggu',$stat['pending'],'bi-clock-fill','#fff8e1','#f59e0b'],
   ['Disetujui',$stat['disetujui'],'bi-check-circle-fill','#e8f8f5','#10b981'],
   ['Aktif Hari Ini',$stat['hari_ini'],'bi-activity','#ede9fe','#6366f1'],
   ['Ditolak',$stat['ditolak'],'bi-x-circle-fill','#fee2e2','#ef4444'],

@@ -289,7 +289,6 @@ function pickSlot(id, label) {
   selSlotLabel = label;
 }
 
-
 // step navigasi
 function goStep(next) {
   if (next > 1) {
@@ -359,7 +358,6 @@ function buildKonfirmasi() {
      </div>`).join('');
 }
 
-// submit
 async function kirim() {
   const btn = document.getElementById('btnKirim');
   btn.disabled = true;
