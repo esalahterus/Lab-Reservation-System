@@ -137,6 +137,7 @@ $did = $_SESSION['dosen_id'];
       <div class="card-header"><h6 class="mb-0 fw-bold"><i class="bi bi-clipboard-check-fill me-2 text-success"></i>Ketentuan</h6></div>
       <div class="card-body p-3">
         <ul class="list-unstyled mb-0" style="font-size:.82rem;color:#555;">
+          <li class="mb-2 d-flex gap-2"><i class="bi bi-check-circle-fill text-success mt-1 flex-shrink-0"></i>Reservasi minimal 2 jam sebelum sesi</li>
           <li class="mb-2 d-flex gap-2"><i class="bi bi-check-circle-fill text-success mt-1 flex-shrink-0"></i>Pembatalan minimal 2 jam sebelum sesi</li>
           <li class="mb-2 d-flex gap-2"><i class="bi bi-check-circle-fill text-success mt-1 flex-shrink-0"></i>Tidak tersedia hari Sabtu/Minggu</li>
           <li class="d-flex gap-2"><i class="bi bi-check-circle-fill text-success mt-1 flex-shrink-0"></i>Simpan kode reservasi untuk tracking</li>
@@ -257,14 +258,19 @@ async function loadSlots() {
   grid.innerHTML = slots.map(s => {
     const booked = parseInt(s.booked) > 0;
     const expired = parseInt(s.expired) === 1;
+
+    const disabled = booked || expired;
+    const cls = `${disabled ? 'booked' : ''} ${expired ? 'expired' : ''}`.trim();
+
     return `<div class="col-sm-6 col-lg-4">
-      <div class="slot-btn ${booked?'booked':''}" id="slot_${s.id}"
-           onclick="${booked?'':  `pickSlot(${s.id},'${s.label}')`}">
+      <div class="slot-btn ${cls}" id="slot_${s.id}"
+           onclick="${disabled ? '' : `pickSlot(${s.id},'${s.label}')`} ">
         <div class="fw-bold" style="font-size:.85rem;">Sesi ${s.sesi}</div>
         <div style="font-size:.78rem;">${s.label}</div>
         <div style="font-size:.72rem;margin-top:3px;">
-          ${expired?'<span style="color:#6b7280;">Non-aktif (sudah lewat)</span>'
-                   :(booked?'<span style="color:#dc2626;">Sudah dipesan</span>':'<span style="color:#059669;">Tersedia</span>')}
+          ${expired
+            ? '<span style="color:#dc2626;">Sudah terlewat atau terlambat</span>'
+            : (booked ? '<span style="color:#dc2626;">Sudah dipesan</span>' : '<span style="color:#059669;">Tersedia</span>')}
         </div>
       </div>
     </div>`;
@@ -272,11 +278,17 @@ async function loadSlots() {
 }
 
 function pickSlot(id, label) {
-  document.querySelectorAll('.slot-btn:not(.booked)').forEach(el => el.classList.remove('selected'));
-  document.getElementById(`slot_${id}`)?.classList.add('selected');
+  const el = document.getElementById(`slot_${id}`);
+  if(el && (el.classList.contains('booked') || el.classList.contains('expired'))){
+    return;
+  }
+
+  document.querySelectorAll('.slot-btn:not(.booked):not(.expired)').forEach(el => el.classList.remove('selected'));
+  el?.classList.add('selected');
   selSlotId = id;
   selSlotLabel = label;
 }
+
 
 // step navigasi
 function goStep(next) {

@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$nama) { $err = 'Nama tidak boleh kosong.'; }
         if (!$user) { $err = 'Username tidak boleh kosong.'; }
         if (!$email) { $err = 'Email tidak boleh kosong.'; }
-        if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) { $err = 'Format email tidak valid.'; }
+        if ($email && !validateEmail($email)) { $err = 'Format email tidak valid.'; }
         if (!$err) {
             $stmt = $db->prepare("SELECT id FROM admin WHERE username=? AND id<>?");
             $stmt->execute([$user, $did]);

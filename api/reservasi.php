@@ -3,7 +3,6 @@ require_once '../includes/config.php';
 header('Content-Type: application/json');
 $db  = getDB();
 $act = $_GET['action'] ?? '';
-$met = $_SERVER['REQUEST_METHOD'];
 
 switch($act){
   case 'slot_status':   slotStatus($db); break;
@@ -18,7 +17,6 @@ switch($act){
   default: jsonRes(false,'action tidak dikenal');
 }
 
-// helpers
 function baseQuery(): string {
     return "SELECT r.*,d.nama dosen,d.nidn,d.email email_dosen,
             ru.nama ruangan,ru.kode kode_ruangan,ru.lokasi,ru.kapasitas,ru.fasilitas,
@@ -33,36 +31,36 @@ function baseQuery(): string {
             JOIN slot_waktu sw ON r.slot_waktu_id=sw.id";
 }
 
-
-// status slot, cek ketersediaan ruangan & tanggal
 function slotStatus(PDO $db): void {
     $rid  = (int)($_GET['ruangan_id']??0);
     $tgl  = $_GET['tanggal']??'';
     if(!$rid||!$tgl) jsonRes(false,'parameter kurang');
-    $stmt = $db->prepare("SELECT sw.id,sw.sesi,sw.label,sw.jam_mulai, (SELECT COUNT(*) FROM reservasi WHERE ruangan_id=? AND tanggal=? AND slot_waktu_id=sw.id AND is_active=1) booked FROM slot_waktu sw ORDER BY sw.sesi");
+
+    $stmt = $db->prepare("SELECT sw.id,sw.sesi,sw.label,sw.jam_mulai,
+            (SELECT COUNT(*) FROM reservasi WHERE ruangan_id=? AND tanggal=? AND slot_waktu_id=sw.id AND is_active=1) booked
+            FROM slot_waktu sw ORDER BY sw.sesi");
     $stmt->execute([$rid,$tgl]);
     $rows = $stmt->fetchAll();
 
+    $now = time();
+    $minGap = 7200;
 
-    if($tgl === date('Y-m-d')) {
-        foreach($rows as &$r) {
-            $waktuMulai = strtotime($tgl.' '.$r['jam_mulai']);
-            if($waktuMulai <= time()) {
-                $r['booked'] = 1;
-                $r['expired'] = 1;
-            } else {
-                $r['expired'] = 0;
-            }
-            unset($r['jam_mulai']);
+    foreach($rows as &$r) {
+        $waktuMulai = strtotime($tgl.' '.$r['jam_mulai']);
+        $r['expired'] = (($waktuMulai - $now) < $minGap) ? 1 : 0;
+
+        if($waktuMulai <= $now) {
+            $r['booked'] = 1;
         }
-    } else {
-        foreach($rows as &$r) { unset($r['jam_mulai']); }
+
+        unset($r['jam_mulai']);
     }
+    unset($r);
 
     jsonRes(true,'ok',['data'=>$rows]);
 }
 
-// jadwal
+
 function jadwal(PDO $db): void {
     $tgl = $_GET['tanggal'] ?? date('Y-m-d');
     $stmt = $db->prepare(baseQuery()." WHERE r.tanggal=? AND r.is_active=1 ORDER BY sw.sesi");
@@ -73,7 +71,6 @@ function jadwal(PDO $db): void {
     jsonRes(true,'ok',['data'=>$data,'ruangan'=>$ruangan,'slots'=>$slots]);
 }
 
-// list reservasi
 function listReservasi(PDO $db): void {
     $status    = $_GET['status']??'';
     $tgl       = $_GET['tanggal']??'';
@@ -105,8 +102,6 @@ function listReservasi(PDO $db): void {
     jsonRes(true,'ok',['data'=>$rows,'total'=>(int)$total->fetchColumn()]);
 }
 
-
-// detail reservasi
 function detail(PDO $db): void {
     $id = (int)($_GET['id']??0);
     $kode = $_GET['kode']??'';
@@ -127,8 +122,6 @@ function detail(PDO $db): void {
     jsonRes(true,'ok',['data'=>$row]);
 }
 
-
-// statistik
 function statistik(PDO $db): void {
     $total =$db->query("SELECT COUNT(*) FROM reservasi")->fetchColumn();
     $pending =$db->query("SELECT COUNT(*) FROM reservasi WHERE status='pending'")->fetchColumn();
@@ -142,7 +135,6 @@ function statistik(PDO $db): void {
     jsonRes(true,'ok',['data'=>compact('total','pending','setuju','tolak','batal','hariIni','bulanIni','ruangan','trend')]);
 }
 
-// laporan
 function laporan(PDO $db): void {
     $dari = $_GET['dari'] ?? date('Y-m-01');
     $ke = $_GET['ke']   ?? date('Y-m-t');
@@ -156,7 +148,6 @@ function laporan(PDO $db): void {
     jsonRes(true,'ok',['data'=>$data,'per_ruangan'=>$per_ruangan->fetchAll(),'per_dosen'=>$per_dosen->fetchAll()]);
 }
 
-// buat reservasi (dosen)
 function buat(PDO $db): void {
     $in = json_decode(file_get_contents('php://input'),true) ?? $_POST;
     $did =(int)($in['dosen_id']??0);
@@ -169,6 +160,17 @@ function buat(PDO $db): void {
 
     if(!$did||!$rid||!$mkid||!$klid||!$slid||!$tgl) jsonRes(false,'Semua field wajib diisi');
 
+    $sw=$db->prepare("SELECT jam_mulai FROM slot_waktu WHERE id=?");
+    $sw->execute([$slid]);
+    $row=$sw->fetch();
+    if(!$row) jsonRes(false,'Slot waktu tidak valid');
+    $now = time();
+    $minGap = 7200;
+    $waktuMulai = strtotime($tgl.' '.$row['jam_mulai']);
+    if(($waktuMulai - $now) < $minGap) {
+        jsonRes(false,'Reservasi hanya dapat dilakukan minimal 2 jam sebelum sesi dimulai');
+    }
+
     try {
         $kode = generateKode();
         $db->prepare("INSERT INTO reservasi(kode_reservasi,dosen_id,ruangan_id,matakuliah_id,kelas_id,slot_waktu_id,tanggal,jurusan,keterangan,status,is_active) VALUES(?,?,?,?,?,?,?,'Informatika',?,'pending',1)")
@@ -180,7 +182,7 @@ function buat(PDO $db): void {
     }
 }
 
-// update status (admin)
+
 function updateStatus(PDO $db): void {
     if(!isAdmin()) jsonRes(false,'Akses ditolak');
     $in = json_decode(file_get_contents('php://input'),true) ?? $_POST;
@@ -193,7 +195,6 @@ function updateStatus(PDO $db): void {
     jsonRes(true,"Reservasi berhasil $status");
 }
 
-// batalkan reservasi (dosen)
 function batalkan(PDO $db): void {
     $in = json_decode(file_get_contents('php://input'),true) ?? $_POST;
     $id = (int)($in['id']??0);
@@ -205,9 +206,19 @@ function batalkan(PDO $db): void {
     if(!$r) jsonRes(false,'Reservasi tidak ditemukan');
     if($r['dosen_id']!=$did && !isAdmin()) jsonRes(false,'Tidak memiliki akses');
     if(!in_array($r['status'],['pending','disetujui'])) jsonRes(false,'Reservasi tidak dapat dibatalkan');
+
     $sw=$db->prepare("SELECT jam_mulai FROM slot_waktu WHERE id=?");
     $sw->execute([$r['slot_waktu_id']]);
     $slot=$sw->fetch();
+    if(!$slot) jsonRes(false,'Slot waktu tidak valid');
+    $now = time();
+    $minGap = 7200;
+    $waktuMulai = strtotime($r['tanggal'].' '.$slot['jam_mulai']);
+    if(($waktuMulai - $now) < $minGap) {
+        jsonRes(false,'Pembatalan minimal 2 jam sebelum sesi dimulai');
+    }
+
     $db->prepare("UPDATE reservasi SET status='dibatalkan',is_active=0 WHERE id=?")->execute([$id]);
     jsonRes(true,'Reservasi berhasil dibatalkan');
 }
+

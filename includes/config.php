@@ -39,6 +39,10 @@ function sanitize(string $s): string {
     return htmlspecialchars(strip_tags(trim($s)), ENT_QUOTES, 'UTF-8');
 }
 
+function validateEmail(string $email): bool {
+    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+}
+
 function formatTgl(string $d): string {
     $bl=['01'=>'Jan','02'=>'Feb','03'=>'Mar','04'=>'Apr','05'=>'Mei','06'=>'Jun',
          '07'=>'Jul','08'=>'Agu','09'=>'Sep','10'=>'Okt','11'=>'Nov','12'=>'Des'];

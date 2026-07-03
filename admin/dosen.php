@@ -83,17 +83,23 @@ function render(){
     </tr>`).join(''):'<tr><td colspan="7" class="text-center py-4 text-muted">Tidak ada data</td></tr>';
 }
 function openModal(reset=true){
-  if(reset){document.getElementById('fId').value='';document.getElementById('mTitle').textContent='Tambah Dosen';
+  if(reset){
+    document.getElementById('fId').value='';
+    document.getElementById('mTitle').textContent='Tambah Dosen';
     ['fNidn','fNama','fEmail','fHp','fPass'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('fStatus').value='aktif';
     document.getElementById('passHint').textContent='(wajib diisi untuk dosen baru)';}
-  new bootstrap.Modal(document.getElementById('mForm')).show();
+    new bootstrap.Modal(document.getElementById('mForm')).show();
 }
 function edit(d){
-  document.getElementById('fId').value=d.id;document.getElementById('mTitle').textContent='Edit Dosen';
-  document.getElementById('fNidn').value=d.nidn;document.getElementById('fNama').value=d.nama;
-  document.getElementById('fEmail').value=d.email;document.getElementById('fHp').value=d.no_hp||'';
-  document.getElementById('fStatus').value=d.status;document.getElementById('fPass').value='';
+  document.getElementById('fId').value=d.id;
+  document.getElementById('mTitle').textContent='Edit Dosen';
+  document.getElementById('fNidn').value=d.nidn;
+  document.getElementById('fNama').value=d.nama;
+  document.getElementById('fEmail').value=d.email;
+  document.getElementById('fHp').value=d.no_hp||'';
+  document.getElementById('fStatus').value=d.status;
+  document.getElementById('fPass').value='';
   document.getElementById('passHint').textContent='(kosongkan jika tidak diubah)';
   new bootstrap.Modal(document.getElementById('mForm')).show();
 }
@@ -112,7 +118,8 @@ async function simpan(){
 }
 async function hapus(id,nama){
   if(!confirm(`Hapus dosen "${nama}"?`)) return;
-  const fd=new FormData();fd.append('id',id);
+  const fd=new FormData();
+  fd.append('id',id);
   const res=await fetch(`${API}?action=del_dosen`,{method:'POST',body:fd}).then(r=>r.json());
   showToast(res.success?'success':'danger',res.message);
   if(res.success) loadData();

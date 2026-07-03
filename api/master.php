@@ -34,12 +34,15 @@ function delItem(PDO $db, string $tbl, int $id): void {
 
 function saveDosen(PDO $db): void {
     $id   = inpI('id');
-    $nidn = inp('nidn'); $nama = inp('nama');
-    $email= inp('email'); $hp   = inp('no_hp');
+    $nidn = inp('nidn'); 
+    $nama = inp('nama');
+    $email= inp('email'); 
+    $hp   = inp('no_hp');
     $stat = inp('status') ?: 'aktif';
     $pass = inp('password');
     if(!$nidn||!$nama||!$email) jsonRes(false,'NIDN, nama, email wajib diisi');
     if($pass && strlen($pass) < 8) jsonRes(false,'Password minimal 8 karakter');
+    if(!validateEmail($email)) jsonRes(false,'Format email tidak valid');
     if($id){
         if($pass){
             $hash = password_hash($pass, PASSWORD_BCRYPT);
@@ -59,6 +62,23 @@ function saveDosen(PDO $db): void {
 function saveMK(PDO $db): void {
     $id=inpI('id'); $kode=inp('kode'); $nama=inp('nama'); $sks=inpI('sks'); $stat=inp('status')?:'aktif';
     if(!$kode||!$nama||!$sks) jsonRes(false,'Kode, nama, SKS wajib diisi');
+    if ($id) {
+        $cek = $db->prepare("
+            SELECT id
+            FROM matakuliah
+            WHERE (kode = ? OR nama = ?) AND id <> ?
+        ");
+        $cek->execute([$kode, $nama, $id]);
+    } else {
+        $cek = $db->prepare("
+            SELECT id
+            FROM matakuliah
+            WHERE kode = ? OR nama = ?
+        ");
+        $cek->execute([$kode, $nama]);
+    }
+    if ($cek->fetch()) jsonRes(false, 'Kode atau nama mata kuliah sudah terdaftar');
+
     if($id){
         $db->prepare("UPDATE matakuliah SET kode=?,nama=?,sks=?,status=? WHERE id=?")->execute([$kode,$nama,$sks,$stat,$id]);
         jsonRes(true,'Mata kuliah berhasil diperbarui');
@@ -71,6 +91,23 @@ function saveMK(PDO $db): void {
 function saveKelas(PDO $db): void {
     $id=inpI('id'); $nama=inp('nama'); $sem=inpI('semester'); $ta=inp('tahun_ajaran'); $kap=inpI('kapasitas'); $stat=inp('status')?:'aktif';
     if(!$nama||!$sem||!$ta||!$kap) jsonRes(false,'Nama kelas, semester, tahun ajaran, dan kapasitas wajib diisi');
+    if ($id) {
+        $cek = $db->prepare("
+            SELECT id
+            FROM kelas
+            WHERE (nama = ?) AND id <> ?
+        ");
+        $cek->execute([$nama, $id]);
+    } else {
+        $cek = $db->prepare("
+            SELECT id
+            FROM kelas
+            WHERE nama = ?
+        ");
+        $cek->execute([$nama]);
+    }
+    if ($cek->fetch()) jsonRes(false, 'Nama kelas sudah terdaftar');
+
     if($id){
         $db->prepare("UPDATE kelas SET nama=?,semester=?,tahun_ajaran=?,kapasitas=?,status=? WHERE id=?")->execute([$nama,$sem,$ta,$kap,$stat,$id]);
         jsonRes(true,'Kelas berhasil diperbarui');
@@ -83,6 +120,23 @@ function saveKelas(PDO $db): void {
 function saveRuangan(PDO $db): void {
     $id=inpI('id'); $kode=inp('kode'); $nama=inp('nama'); $kap=inpI('kapasitas'); $lok=inp('lokasi'); $fas=inp('fasilitas'); $stat=inp('status')?:'aktif';
     if(!$kode||!$nama) jsonRes(false,'Kode dan nama ruangan wajib diisi');
+    if ($id) {
+        $cek = $db->prepare("
+            SELECT id
+            FROM ruangan
+            WHERE (kode = ? OR nama = ?) AND id <> ?
+        ");
+        $cek->execute([$kode, $nama, $id]);
+    } else {
+        $cek = $db->prepare("
+            SELECT id
+            FROM ruangan
+            WHERE kode = ? OR nama = ?
+        ");
+        $cek->execute([$kode, $nama]);
+    }
+    if ($cek->fetch()) jsonRes(false, 'Kode atau nama ruangan sudah terdaftar');
+
     if($id){
         $db->prepare("UPDATE ruangan SET kode=?,nama=?,kapasitas=?,lokasi=?,fasilitas=?,status=? WHERE id=?")->execute([$kode,$nama,$kap,$lok,$fas,$stat,$id]);
         jsonRes(true,'Ruangan berhasil diperbarui');

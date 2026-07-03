@@ -15,6 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!$nama || !$username || !$p || !$cp) {
         $err = 'Nama, username, dan password wajib diisi!';
+    } elseif ($email && !validateEmail($email)) {
+        $err = 'Format email tidak valid!';
     } elseif ($p !== $cp) {
         $err = 'Konfirmasi password tidak sama!';
     } elseif (strlen($p) < 8) {

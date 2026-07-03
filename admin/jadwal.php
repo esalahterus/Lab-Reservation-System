@@ -44,7 +44,8 @@ async function load(){
   }
   const res=await fetch(`${API}?action=jadwal&tanggal=${tgl}`).then(r=>r.json());
   const {data=[],ruangan=[],slots=[]}=res;
-  const lk={};data.forEach(b=>{lk[`${b.ruangan_id}_${b.sesi}`]=b;});
+  const lk={};
+  data.forEach(b=>{lk[`${b.ruangan_id}_${b.sesi}`]=b;});
   gw.innerHTML=`<table class="table table-bordered" style="min-width:700px;">
     <thead><tr><th style="min-width:120px;">Sesi / Jam</th>${ruangan.map(r=>`<th style="min-width:160px;">${r.nama}</th>`).join('')}</tr></thead>
     <tbody>${slots.map(s=>`<tr>
