@@ -156,7 +156,6 @@ const MAPI = '../api/master.php';
 let selSlotId = null, selSlotLabel = '';
 let step = 1;
 
-// init
 (async () => {
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('fTgl').min = today;
@@ -242,7 +241,6 @@ function onTglChange() {
   if (document.getElementById('fRuangan').value) loadSlots();
 }
 
-
 async function loadSlots() {
   const rid = document.getElementById('fRuangan').value;
   const tgl = document.getElementById('fTgl').value;
@@ -289,7 +287,6 @@ function pickSlot(id, label) {
   selSlotLabel = label;
 }
 
-// step navigasi
 function goStep(next) {
   if (next > 1) {
     const mk = document.getElementById('fMK').value;
@@ -328,7 +325,6 @@ function goStep(next) {
     el.style.color = i <= next ? '#fff' : '#aaa';
   });
 }
-
 
 function buildKonfirmasi() {
   const mkSel = document.getElementById('fMK');

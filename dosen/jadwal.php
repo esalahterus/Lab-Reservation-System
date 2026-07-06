@@ -32,7 +32,6 @@ $cur = basename(__FILE__);
   </div>
 </div>
 
-<!-- quick nav seminggu -->
 <div class="card">
   <div class="card-header"><h6 class="mb-0 fw-bold"><i class="bi bi-calendar-week me-2 text-primary"></i>Navigasi Cepat – 7 Hari ke Depan</h6></div>
   <div class="card-body">

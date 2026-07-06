@@ -37,7 +37,6 @@ $mendatang=$mendatang->fetchAll();
 <div class="main-content"><?= dosenTopbar('Dashboard') ?>
 <div class="content-area">
 
-<!-- selamat datang -->
 <div class="p-4 mb-4 rounded-4" style="background:linear-gradient(135deg,#0d1b2a,#2d1b69);color:#fff;">
   <div class="d-flex align-items-center gap-3">
     <div style="width:56px;height:56px;background:linear-gradient(135deg,#6366f1,#4f46e5);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;"><i class="bi bi-person-circle"></i></div>
