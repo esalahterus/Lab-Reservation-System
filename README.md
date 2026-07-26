@@ -198,3 +198,11 @@ Jika belum ada akun admin, lakukan registrasi:
    - **Konfirmasi Password**: Sama dengan Password
 3. Klik **Buat Akun Admin**
 4. Setelah berhasil, login dengan username & password yang tadi didaftarkan
+
+## Author
+
+| Name | GitHub |
+|------|--------|
+| **Esa Adya Syawal** | https://github.com/esalahterus |
+| **Rifno Arka** | https://github.com/Rifno26 |
+| **Dwi Ahmad Firdaus** | https://github.com/firdaus09-dev |
