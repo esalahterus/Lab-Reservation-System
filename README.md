@@ -4,12 +4,6 @@
 
 ---
 
-## Website
-
-Aplikasi dapat diakses secara langsung melalui: https://sireslab.free.nf
-
----
-
 ## Fitur Utama
 
 ### Admin
